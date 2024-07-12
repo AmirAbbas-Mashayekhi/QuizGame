@@ -8,9 +8,10 @@ func main() {
 	csvPtr, limitPtr := parseFlags()
 	records := readCSV(*csvPtr)
 	qs := quizStats{score: 0, total: len(records)}
+	problemSet := createProblemSet(records)
 
 	// flow
-	go Quiz(records, &qs, c)
+	go Quiz(problemSet, &qs, c)
 	go exitWhenReachesLimit(*limitPtr, c)
 
 	// final

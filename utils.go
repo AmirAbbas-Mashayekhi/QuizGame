@@ -15,6 +15,19 @@ type quizStats struct {
 	total int
 }
 
+type problem struct {
+	question string
+	answer   string
+}
+
+func createProblemSet(csvRecords [][]string) []problem {
+	var problemSet []problem
+	for _, record := range csvRecords {
+		problemSet = append(problemSet, problem{question: record[0], answer: record[1]})
+	}
+	return problemSet
+}
+
 func parseFlags() (*string, *int64) {
 	csvPtr := flag.String(
 		"csv",
@@ -51,21 +64,21 @@ func readCSV(filename string) [][]string {
 	return records
 }
 
-func Quiz(csvRecords [][]string, qs *quizStats, c chan string) {
-	for _, record := range csvRecords {
+func Quiz(problems []problem, qs *quizStats, c chan string) {
+	for _, prob := range problems {
 		var ans string
-		fmt.Printf("%v: ", record[0])
+		fmt.Printf("%v: ", prob.question)
 		_, err := fmt.Scanln(&ans)
 		if err != nil {
 			log.Fatal(err)
 		}
-		scoreQuestion(record, ans, qs)
+		scoreQuestion(prob, ans, qs)
 	}
 	c <- "completed"
 }
 
-func scoreQuestion(q []string, ans string, qs *quizStats) {
-	if cleanString(q[1]) == cleanString(ans) {
+func scoreQuestion(p problem, ans string, qs *quizStats) {
+	if cleanString(p.answer) == cleanString(ans) {
 		qs.score++
 	}
 }
@@ -75,7 +88,7 @@ func cleanString(s string) string {
 }
 
 func showStats(qs *quizStats) {
-	fmt.Printf("%v / %v", qs.score, qs.total)
+	fmt.Printf("%v / %v\n", qs.score, qs.total)
 }
 
 func exitWhenReachesLimit(l int64, c chan string) {
