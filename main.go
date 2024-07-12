@@ -15,6 +15,6 @@ func main() {
 	go exitWhenReachesLimit(*limitPtr, c)
 
 	// final
-	fmt.Println(<-c)
+	fmt.Println("\n", <-c)
 	showStats(&qs)
 }

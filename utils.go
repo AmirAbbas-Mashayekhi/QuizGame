@@ -4,12 +4,14 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"github.com/fatih/color"
 	"log"
 	"os"
 	"strings"
 	"time"
 )
 
+// Types
 type quizStats struct {
 	score int
 	total int
@@ -74,7 +76,7 @@ func Quiz(problems []problem, qs *quizStats, c chan string) {
 		}
 		scoreQuestion(prob, ans, qs)
 	}
-	c <- "completed"
+	c <- color.BlueString("completed")
 }
 
 func scoreQuestion(p problem, ans string, qs *quizStats) {
@@ -88,10 +90,11 @@ func cleanString(s string) string {
 }
 
 func showStats(qs *quizStats) {
-	fmt.Printf("%v / %v\n", qs.score, qs.total)
+	fmt.Print(color.GreenString("%v / ", qs.score))
+	fmt.Print(color.WhiteString("%v\n", qs.total))
 }
 
 func exitWhenReachesLimit(l int64, c chan string) {
 	time.Sleep(time.Duration(l) * time.Second)
-	c <- "Time Limit Exceeded"
+	c <- color.RedString("Time Limit Exceeded")
 }
