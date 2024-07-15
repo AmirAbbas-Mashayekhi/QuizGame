@@ -12,7 +12,7 @@ func main() {
 
 	// flow
 	go Quiz(problemSet, &qs, c)
-	go exitWhenReachesLimit(*limitPtr, c)
+	go timer(*limitPtr, c)
 
 	// final
 	fmt.Println("\n", <-c)

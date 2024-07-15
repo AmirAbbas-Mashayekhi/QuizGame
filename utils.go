@@ -25,7 +25,13 @@ type problem struct {
 func createProblemSet(csvRecords [][]string) []problem {
 	var problemSet []problem
 	for _, record := range csvRecords {
-		problemSet = append(problemSet, problem{question: record[0], answer: record[1]})
+		problemSet = append(
+			problemSet,
+			problem{
+				question: record[0],
+				answer:   record[1],
+			},
+		)
 	}
 	return problemSet
 }
@@ -94,7 +100,7 @@ func showStats(qs *quizStats) {
 	fmt.Print(color.WhiteString("%v\n", qs.total))
 }
 
-func exitWhenReachesLimit(l int64, c chan string) {
+func timer(l int64, c chan string) {
 	time.Sleep(time.Duration(l) * time.Second)
 	c <- color.RedString("Time Limit Exceeded")
 }
